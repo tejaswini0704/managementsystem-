@@ -3,26 +3,26 @@
 #define STR_LEN 40
 
 typedef struct student{
-    char name[STR_LEN];     //名字，字符串表示
-    int gender;             //性别，0表示无，1表示男性，2表示女性
-    int age;                //年龄，整数表示
+    char name[STR_LEN];     
+    int gender;            
+    int age;                
 }student;
 
-void menu(int flag, int *num);              //用于展示系统功能并引导进入各功能
-void read(student *p, int *num);            //用于读入学生数据到缓存
-void init(int *num);                        //用于初始化数据库(内存),num指示运行状态
-void show(student *p, int *num);            //用于打印学生数据
-void showline();                            //打印一行分割线，更加美观
-void open(student *p, int *num, int flag);  //用于打开本地文件读取数据
-void save(student *p, int *num);            //用于保存学生数据到本地文件
+void menu(int flag, int *num);              
+void read(student *p, int *num);           
+void init(int *num);                        
+void show(student *p, int *num);            
+void showline();                           
+void open(student *p, int *num, int flag);  
+void save(student *p, int *num);            
 
-student *data = NULL;   //用作数组头指针，初始化为NULL
+student *data = NULL;   
 
 int main(){
     system("cls");
     int num = 0;
-    int flag = 0;           //flag 用于指示系统的运行状态，0表示首次打开，1表示已经打开，-1表示运行出错
-    menu(flag++, &num);   //进入菜单，状态为0，同时注册状态为1
+    int flag = 0;           
+    menu(flag++, &num);  
     return 0;
 }
 
@@ -34,7 +34,7 @@ void menu(int flag, int *num){
     int choice = 0;
     scanf("%d", &choice);
     switch(choice){
-        //选择1，则进入读入数据程序
+       
         case 1:{
             printf("\033[0;35mPlease input the number of data which you want to input:\033[0m");
             scanf("%d", num);
@@ -42,20 +42,20 @@ void menu(int flag, int *num){
             read(data, num);
             return;
         }
-        //选择2，则进入输出数据程序
+        
         case 2:{
             show(data, num);
         }
-        //选择3，则进入保存数据程序
+        
         case 3:{
             save(data, num);
             return;
         }
-        //选择4，则进入读取数据程序
+        
         case 4:{
             open(data, num, flag);
         }
-        //选择5，则进入退出菜单程序
+       
         case 5: exit(0);
         default: {
             printf("\033[0;31mError: Cannot identify your input!\033[0m");
@@ -65,7 +65,7 @@ void menu(int flag, int *num){
 }
 
 void init(int *num){
-    data = (student*)malloc((*num)*sizeof(student));   //为读入的数据动态开内存
+    data = (student*)malloc((*num)*sizeof(student));   
     for(int i = 0; i < *num; i++){
         for(int j = 0; j < STR_LEN; j++){
             data->name[j] = 0;
@@ -74,7 +74,7 @@ void init(int *num){
         data->age = 0;
         data++;
     }
-    data -= *num;    //指针置初始位置
+    data -= *num;    
     read(data, num);
 }
 
@@ -94,7 +94,7 @@ void read(student *p, int *num){
     showline();
     printf("\033[0;32mAll students's data has benn added to the system.now back to main system\033[0m\n");
     showline();
-    menu(1, num);    //返回菜单，状态为1
+    menu(1, num);    
 }
 
 void show(student *p, int *num){
@@ -128,12 +128,12 @@ void open(student *p, int *num, int flag){
     *num = 0;
     FILE *fp = fopen("studentdata", "r");
     if(fp){
-        fseek(fp, 0L, SEEK_END);     //移动指针到文件尾
-        long size = ftell(fp);              //此时fp的偏移字节数即为文件总数据大小
-        *num = size/(sizeof(student));      //通过除法计算数据块数量
-        fseek(fp, 0L, SEEK_SET);     //移动指针到文件头
+        fseek(fp, 0L, SEEK_END);     
+        long size = ftell(fp);              
+        *num = size/(sizeof(student));     
+        fseek(fp, 0L, SEEK_SET);    
 
-        if(flag == 1) free(data);           //如果运行状态为1，应当释放内存重新申请
+        if(flag == 1) free(data);          
         data = (student *)malloc((*num)*sizeof(student));
         p = data;
 
